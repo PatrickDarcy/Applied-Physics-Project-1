@@ -10,16 +10,22 @@ int main()
 	ground.setPosition(0, 700);
 	ground.setSize(sf::Vector2f{ 800,100 });
 
-	sf::CircleShape shape(10.0f);
+	sf::CircleShape shape(.50f);
 	shape.setFillColor(sf::Color::Green);
 
 	sf::Vector2f velocity(0, 0);
-	sf::Vector2f position(400, 680);
+	sf::Vector2f position(400, 699);
 
 	sf::Vector2f gravity(0.0f, 9.8f);
 
 	sf::Time currentTime;
-
+	sf::Text timeInAir;
+	sf::Font font;
+ 	font.loadFromFile("game_over.ttf");
+	timeInAir.setCharacterSize(10);
+	timeInAir.setFillColor(sf::Color::Blue);
+	timeInAir.setFont(font);
+	timeInAir.setPosition(50, 50);
 
 
 	sf::Clock clock;
@@ -55,11 +61,14 @@ int main()
 		if (timeSinceLastUpdate > timePerFrame)
 		{
 
-			if (position.y + 20 <= ground.getPosition().y || velocity.y < 0)
+			if (position.y + 2.0 <= ground.getPosition().y || velocity.y < 0)
 			{
 				velocity = velocity + gravity * timeSinceLastUpdate.asSeconds();
 				position = position + velocity * timeSinceLastUpdate.asSeconds() + (0.5f * gravity * (timeSinceLastUpdate.asSeconds() * timeSinceLastUpdate.asSeconds()));
 				currentTime += timeSinceLastUpdate;
+				
+				timeInAir.setString("Time: " + std::to_string(currentTime.asSeconds()));
+
 			}
 	
 
@@ -75,6 +84,7 @@ int main()
 
 			window.draw(shape);
 			window.draw(ground);
+			window.draw(timeInAir);
 
 			window.display();
 			timeSinceLastUpdate = sf::Time::Zero;
