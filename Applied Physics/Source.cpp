@@ -1,5 +1,24 @@
-#include<iostream>
-#include <SFML/Graphics.hpp>
+#ifdef _DEBUG 
+#pragma comment(lib,"sfml-graphics-d.lib") 
+#pragma comment(lib,"sfml-audio-d.lib") 
+#pragma comment(lib,"sfml-system-d.lib") 
+#pragma comment(lib,"sfml-window-d.lib") 
+#pragma comment(lib,"sfml-network-d.lib") 
+#else 
+#pragma comment(lib,"sfml-graphics.lib") 
+#pragma comment(lib,"sfml-audio.lib") 
+#pragma comment(lib,"sfml-system.lib") 
+#pragma comment(lib,"sfml-window.lib") 
+#pragma comment(lib,"sfml-network.lib") 
+#endif 
+#pragma comment(lib,"opengl32.lib") 
+#pragma comment(lib,"glu32.lib") 
+
+#include "SFML/Graphics.hpp" 
+#include "SFML/OpenGL.hpp" 
+
+#include <iostream>
+
 
 int main()
 {
@@ -20,13 +39,33 @@ int main()
 
 	sf::Time currentTime;
 	sf::Text timeInAir;
+	sf::Text maxHeight;
+	sf::Text predictTime;
 	sf::Font font;
- 	font.loadFromFile("game_over.ttf");
-	timeInAir.setCharacterSize(10);
+
+	if (!font.loadFromFile("game_over.ttf"))
+	{
+		std::string s("Error loading texture");
+		throw std::exception(s.c_str());
+	}
+
+	timeInAir.setCharacterSize(50);
 	timeInAir.setFillColor(sf::Color::Blue);
 	timeInAir.setFont(font);
-	timeInAir.setPosition(50, 50);
+	timeInAir.setPosition(50, 105);
 
+	maxHeight.setCharacterSize(50);
+	maxHeight.setFillColor(sf::Color::Blue);
+	maxHeight.setFont(font);
+	maxHeight.setPosition(50, 50);
+
+	predictTime.setCharacterSize(50);
+	predictTime.setFillColor(sf::Color::Blue);
+	predictTime.setFont(font);
+	predictTime.setPosition(50, 160);
+
+	float m_maxHeight = 0.0f;
+	float m_predictTime;
 
 	sf::Clock clock;
 
@@ -50,6 +89,12 @@ int main()
 			{
 				velocity = { 0,-50 };
 				currentTime = sf::seconds(0.0f);
+
+				m_maxHeight = (velocity.y * velocity.y) / (2.0 * gravity.y);
+				m_predictTime = (2.0 * -velocity.y) / gravity.y;
+
+				maxHeight.setString("Max Height: " + std::to_string(m_maxHeight));
+				predictTime.setString("Predicted Time: " + std::to_string(m_predictTime));
 			}
 		}
 
@@ -85,6 +130,8 @@ int main()
 			window.draw(shape);
 			window.draw(ground);
 			window.draw(timeInAir);
+			window.draw(maxHeight);
+			window.draw(predictTime);
 
 			window.display();
 			timeSinceLastUpdate = sf::Time::Zero;

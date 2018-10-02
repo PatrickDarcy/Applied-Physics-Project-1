@@ -1,2 +1,4 @@
 ﻿  Source.cpp
+c:\users\c00226157\desktop\applied physics\applied physics\source.cpp(93): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\c00226157\desktop\applied physics\applied physics\source.cpp(94): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
   Applied Physics.vcxproj -> C:\Users\C00226157\Desktop\Applied Physics\Debug\Applied Physics.exe
